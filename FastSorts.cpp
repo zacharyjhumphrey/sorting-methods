@@ -5,7 +5,7 @@ using namespace std;
 //See source: https://www.geeksforgeeks.org/heap-sort/?ref=lbp
 //Program to perform Heap Sort 
 
-void swap(int arr[], int arr2[])
+void swapArray(int arr[], int arr2[])
 {
     //temp stores the original value 
     int i, large;
