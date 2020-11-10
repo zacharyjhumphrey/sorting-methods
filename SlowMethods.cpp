@@ -17,14 +17,13 @@ void selectionSort(int arr[], int n)
 			{
 				temp = min_idx;
 				min_idx = j;
-				
+
 				arr[i] = arr[min_idx];
 			}
 		}
+
 		// Swap the found minimum element with the first
-
-
-		swap(&arr[min_idx], &arr[i]);
+		swap(arr[min_idx], arr[i]);
 	}
 }
 
@@ -40,7 +39,7 @@ void bubbleSort(int arr[], int n)
 		{
 			if (arr[j] > arr[j + 1])
 			{
-				swap(&arr[j], &arr[j + 1]);
+				swap(arr[j], arr[j + 1]);
 				swapped = true;
 			}
 		}
@@ -52,13 +51,13 @@ void bubbleSort(int arr[], int n)
 }
 
 
-
-void swap(int &arr[], int &arr2[])
+/* SWAP -----------------------------------------------------
+	Swaps an integer in an array with another integer
+---------------------------------------------------------- */
+void swap(int& num1, int& num2)
 {
-	int i, min_idx, temp;
+	int temp = num1;
 
-		temp = arr[i];
-		arr[i] = arr[min_idx];
-		arr[min_idx] = temp;
-	
+	num1 = num2;
+	num2 = temp;
 }
