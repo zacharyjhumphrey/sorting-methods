@@ -36,7 +36,7 @@ void heapify(int arr[], int n, int i)
     // If largest is not root 
     if (large != i)
     {
-        swap(arr[i], arr[large]); //swap the value we are at with the largest number
+        swapArray(arr[i], arr[large]); //swap the value we are at with the largest number
 
         // Recursively heapify the affected sub-tree 
         heapify(arr, n, large);
@@ -54,7 +54,7 @@ void heapSort(int arr[], int n)
     for (int i = n - 1; i > 0; i--)
     {
         // Move current root to end 
-        swap(arr[0], arr[i]);
+        swapArray(arr[0], arr[i]);
 
         // call max heapify on the reduced heap 
         heapify(arr, i, 0); //Resorts the list, puts the max number at the parent node 
