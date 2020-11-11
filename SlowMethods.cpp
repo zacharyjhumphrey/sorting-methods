@@ -10,15 +10,15 @@ void selectionSort(int arr[], int n)
 		// Find the minimum element in unsorted array
 		min_idx = i;
 
-		temp = min_idx;
+		temp = min_idx; //Stores the minimum value into a temporary placeholder to not corrupt the original
 		for (j = i + 1; j < n; j++)
 		{
-			if (arr[j] < arr[min_idx])
+			if (arr[j] < arr[min_idx]) //Checks to see if the value of our second search parameter is smaller
 			{
-				temp = min_idx;
-				min_idx = j;
+				temp = min_idx; //Stores the newly found smaller value into the temp slot
+				min_idx = j; //Replaces smaller value with new value
 
-				arr[i] = arr[min_idx];
+				arr[i] = arr[min_idx]; //Puts the value of our initial number equal to the value of the new lower number
 			}
 		}
 
@@ -30,17 +30,17 @@ void selectionSort(int arr[], int n)
 
 void bubbleSort(int arr[], int n)
 {
-	int i, j;
-	bool swapped;
+	int i, j; //Control variables
+	bool swapped; //Bool saying if the values have been swapped or not
 	for (i = 0; i < n - 1; i++)
 	{
-		swapped = false;
-		for (j = 0; j < n - i - 1; j++)
+		swapped = false; //Sets swapped equal to false as our anchor
+		for (j = 0; j < n - i - 1; j++) //As long as the array index of j is less than the value of n-i-1 then the value of j increments
 		{
-			if (arr[j] > arr[j + 1])
+			if (arr[j] > arr[j + 1]) //If the value of j is less than the value of j+1 (or i) then -> 
 			{
-				swap(arr[j], arr[j + 1]);
-				swapped = true;
+				swap(arr[j], arr[j + 1]); // -> j and j+1 swap
+				swapped = true; //swapped becomes true and when this reiterates, the swapped value breaks us out of the loop
 			}
 		}
 
