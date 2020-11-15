@@ -6,6 +6,7 @@ void swapQ(int* a, int* b)
 void split(int arr[], int first, int last, int& position)
 void QuickSort(int arr[], int first, int last);
 void swapArray(int arr[], int arr2[]);
+void heapify(int arr[], int n, int i)
 void heapSort(int arr[], int n);
 
 #endif 
