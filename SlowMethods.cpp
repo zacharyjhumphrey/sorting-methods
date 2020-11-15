@@ -2,6 +2,9 @@
 #include <iomanip>
 using namespace std;
 
+/*The code for the binary and the selection sort were pulled from the slides created by Ms. Talley at UCA. The link I used was through my student account, but was as
+follows. https://bblearn.uca.edu/webapps/blackboard/execute/content/file?cmd=view&content_id=_2118618_1&course_id=_100666_1 */
+
 void selectionSort(int arr[], int n)
 {
 	int i, j, min_idx;
