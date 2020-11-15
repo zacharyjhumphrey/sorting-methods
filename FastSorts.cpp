@@ -35,7 +35,7 @@ void split(int arr[], int first, int last, int& position)
     arr[position] = pivot; 
 }
 
-void quickSort(int arr[],int first, int last)
+void quickSort(int arr[],int first, int last, int& postion)
 {
     //if the first number is less than the last number 
     if (first < last)
