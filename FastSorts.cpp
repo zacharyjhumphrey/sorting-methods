@@ -50,7 +50,7 @@ void quickSort(int arr[],int first, int last)
 //See source: https://www.geeksforgeeks.org/heap-sort/?ref=lbp
 //Program to perform Heap Sort 
 
-void swap2(int& num1, int& num2)
+void swapArray(int& num1, int& num2)
 {
 	int temp = num1;
 
