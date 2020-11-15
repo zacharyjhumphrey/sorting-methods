@@ -13,14 +13,11 @@
 #include "timsort.h"
 
 // @J'LUN INCLUDE HEADERS
-<<<<<<< HEAD
 #include "slowSorts.h"
-=======
 
 // @SEAN INCLUDE HEADERS
 #include "slowSorts.h"
 
->>>>>>> a51b50b405aae989c45e368cfecdcbec9861c1d6
 using namespace std;
 using namespace std::chrono;
 
@@ -126,13 +123,9 @@ int main()
 		/*----------------- Sort 3: @J'LUN "SORT2" ----------------- */
 
 		/*----------------- Sort 4: @SEAN "SORT1" ----------------- */
-<<<<<<< HEAD
-		
-=======
 		int* bubble_array = copyArray(original_array);
 		runTest(bubble_array, bubble, i); // Sorts in random case and pre-sorted case
 		delete[] bubble_array;
->>>>>>> a51b50b405aae989c45e368cfecdcbec9861c1d6
 
 		/*----------------- Sort 5: @SEAN "SORT2" ----------------- */
 		int* selection_array = copyArray(original_array);
