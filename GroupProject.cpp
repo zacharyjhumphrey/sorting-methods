@@ -11,7 +11,7 @@
 #include <chrono> 
 #include "timsort.h"
 // @J'LUN INCLUDE HEADERS
-// @SEAN INCLUDE HEADERS
+#include "slowSorts.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -103,6 +103,7 @@ int main()
 		/*----------------- Sort 3: @J'LUN "SORT2" ----------------- */
 
 		/*----------------- Sort 4: @SEAN "SORT1" ----------------- */
+		
 
 		/*----------------- Sort 5: @SEAN "SORT2" ----------------- */
 	}

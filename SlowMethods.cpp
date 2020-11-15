@@ -1,30 +1,27 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 void selectionSort(int arr[], int n)
 {
-	int i, j, min_idx, temp;
+	int i, j, min_idx;
 	// One by one move boundary of unsorted subarray
 	for (i = 0; i < n - 1; i++)
 	{
 		// Find the minimum element in unsorted array
 		min_idx = i;
 
-		temp = min_idx;
 		for (j = i + 1; j < n; j++)
 		{
 			if (arr[j] < arr[min_idx])
 			{
-				temp = min_idx;
 				min_idx = j;
-				
-				arr[i] = arr[min_idx];
 			}
 		}
 		// Swap the found minimum element with the first
 
 
-		swap(&arr[min_idx], &arr[i]);
+		swap(arr[min_idx], arr[i]);
 	}
 }
 
@@ -40,7 +37,7 @@ void bubbleSort(int arr[], int n)
 		{
 			if (arr[j] > arr[j + 1])
 			{
-				swap(&arr[j], &arr[j + 1]);
+				swap(arr[j], arr[j + 1]);
 				swapped = true;
 			}
 		}
@@ -52,13 +49,13 @@ void bubbleSort(int arr[], int n)
 }
 
 
-
-void swap(int &arr[], int &arr2[])
+/*Swap Function provided by https://www.geeksforgeeks.org/selection-sort/ */
+void swap(int* arr, int* arr2)
 {
-	int i, min_idx, temp;
+	int temp;
 
-		temp = arr[i];
-		arr[i] = arr[min_idx];
-		arr[min_idx] = temp;
-	
+	temp = *arr;
+	*arr = *arr2;
+	*arr2 = temp;
+
 }
