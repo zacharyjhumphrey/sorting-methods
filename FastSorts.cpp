@@ -50,15 +50,14 @@ void quickSort(int arr[],int first, int last)
 //See source: https://www.geeksforgeeks.org/heap-sort/?ref=lbp
 //Program to perform Heap Sort 
 
-void swapArray(int arr[], int arr2[])
+void swap2(int& num1, int& num2)
 {
-    //temp stores the original value 
-    int i, large;
-    int temp = arr[1]; //original number 
-    arr[i] = arr[large]; //becomes the largest value 
-    arr[large] = temp; //changes the arr[large] to equal the original number 
+	int temp = num1;
 
+	num1 = num2;
+	num2 = temp;
 }
+
 
 //Heapify array rooted with node
 void heapify(int arr[], int n, int i)
@@ -81,7 +80,7 @@ void heapify(int arr[], int n, int i)
     // If largest is not root 
     if (large != i)
     {
-        swapArray(arr[i], arr[large]); //swap the value we are at with the largest number
+		swap2(arr[i], arr[large]); //swap the value we are at with the largest number
 
         // Recursively heapify the affected sub-tree 
         heapify(arr, n, large);
@@ -99,7 +98,7 @@ void heapSort(int arr[], int n)
     for (int i = n - 1; i > 0; i--)
     {
         // Move current root to end 
-        swapArray(arr[0], arr[i]);
+		swap2(arr[0], arr[i]);
 
         // call max heapify on the reduced heap 
         heapify(arr, i, 0); //Resorts the list, puts the max number at the parent node 
@@ -107,5 +106,4 @@ void heapSort(int arr[], int n)
 }
 
 //#include "FastSorts.h
-//printRecord(heapSort)
-//delete[]
+

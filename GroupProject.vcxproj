@@ -138,10 +138,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FastSorts.h" />
     <ClInclude Include="slowSorts.h" />
     <ClInclude Include="timSort.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FastSorts.cpp" />
     <ClCompile Include="GroupProject.cpp" />
     <ClCompile Include="SlowMethods.cpp" />
     <ClCompile Include="timSort.cpp" />

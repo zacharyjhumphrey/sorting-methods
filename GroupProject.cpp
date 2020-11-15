@@ -1,10 +1,4 @@
 // GroupProject.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-/*
-	TODO:	
-		- Remember how to format the output to make it look pretty
-			- Need to make column for random sort AND pre-sorted sort
-*/
 
 #include <iostream>
 #include <iomanip>
@@ -13,7 +7,7 @@
 #include "timsort.h"
 
 // @J'LUN INCLUDE HEADERS
-#include "slowSorts.h"
+#include "FastSorts.h"
 
 // @SEAN INCLUDE HEADERS
 #include "slowSorts.h"
@@ -21,7 +15,7 @@
 using namespace std;
 using namespace std::chrono;
 
-const int ARRAY_SIZE = 1000;
+const int ARRAY_SIZE = 50;
 
 struct Case {
 	int total_time = 0;
@@ -42,7 +36,7 @@ int* randomArray();
 int* copyArray(int* original_array);
 void runTest(int* arr, Record &record, int test_num);
 void printArray(int* arr);
-void printRecords(Record r1, Record r2, Record r3);
+void printRecords(Record r1, Record r2, Record r3, Record r4, Record r5);
 
 /* ------------------------------------------------------ MAIN ------------------------------------------------------ */
 /* DRIVER -----------------------------
@@ -69,9 +63,12 @@ int main()
 	int num_tests = 0;
 	
 	Record timsort;
+
 	// @J'LUN "SORT1"
+	Record quicksort;
+
 	// @J'LUN "SORT2"
-	
+	Record heapsort;
 	
 	// @SEAN "SORT1"
 	Record bubble;
@@ -95,7 +92,10 @@ int main()
 	timsort.random.tests = new int[num_tests];
 
 	/* @J'LUN CREATE RECORD MEMORY */
-
+	quicksort.sorted.tests = new int[num_tests];
+	quicksort.random.tests = new int[num_tests];
+	heapsort.sorted.tests = new int[num_tests];
+	heapsort.random.tests = new int[num_tests];
 
 	/* @SEAN CREATE RECORD MEMORY */
 	bubble.sorted.tests = new int[num_tests];
@@ -107,11 +107,9 @@ int main()
 	for (int i = 0; i < num_tests; i++) { 
 		int* original_array = randomArray();
 		
-		/* @TEST
-			cout << "ORIGINAL ARRAY: " << endl;
-			printArray(original_array);
-			cout << endl << endl;
-		*/
+		cout << "ORIGINAL ARRAY: " << endl;
+		printArray(original_array);
+		cout << endl << endl;
 
 		/*----------------- Sort 1: Timsort ----------------- */
 		int* timsort_array = copyArray(original_array);
@@ -119,8 +117,14 @@ int main()
 		delete[] timsort_array;
 
 		/*----------------- Sort 2: @J'LUN "SORT1" ----------------- */
+		int* quicksort_array = copyArray(original_array);
+		runTest(quicksort_array, quicksort, i); // Sorts in random case and pre-sorted case
+		delete[] quicksort_array;
 
 		/*----------------- Sort 3: @J'LUN "SORT2" ----------------- */
+		int* heapsort_array = copyArray(original_array);
+		runTest(heapsort_array, heapsort, i); // Sorts in random case and pre-sorted case
+		delete[] heapsort_array;
 
 		/*----------------- Sort 4: @SEAN "SORT1" ----------------- */
 		int* bubble_array = copyArray(original_array);
@@ -131,56 +135,60 @@ int main()
 		int* selection_array = copyArray(original_array);
 		runTest(selection_array, selection, i); // Sorts in random case and pre-sorted case
 		delete[] selection_array;
+
 	}
 
-	// Find minimum for each 
+
+	// MINIMUM -------------
 	timsort.random.min = findMin(timsort.random.tests, num_tests);
 	
 	/* @J'LUN FIND THE MIN */
-
+	quicksort.random.min = findMin(quicksort.random.tests, num_tests);
+	heapsort.random.min = findMin(heapsort.random.tests, num_tests);
 
 	/* @SEAN FIND THE MIN */
 	bubble.random.min = findMin(bubble.random.tests, num_tests);
 	selection.random.min = findMin(selection.random.tests, num_tests);
 
-	// Find maximum for each
+
+	// MAXIMUM -------------
 	timsort.random.max = findMax(timsort.random.tests, num_tests);
 	
-	/* @J'LUN FIND THE MAX */
+	/* @J'LUN */
+	quicksort.random.max = findMax(quicksort.random.tests, num_tests);
+	heapsort.random.max = findMax(heapsort.random.tests, num_tests);
 
-
-	/* @SEAN FIND THE MAX */
+	/* @SEAN */
 	bubble.random.max = findMax(bubble.random.tests, num_tests);
 	selection.random.max = findMax(selection.random.tests, num_tests);
 
-	// Find the average unsorted time for each
+
+	// UNSORTED AVERAGE -----
 	timsort.random.average_time = timsort.random.total_time / num_tests;
 
-	/* @J'LUN FIND THE MAX */
+	/* @J'LUN */
+	quicksort.random.average_time = quicksort.random.total_time / num_tests;
+	heapsort.random.average_time = heapsort.random.total_time / num_tests;
 
-
-	/* @SEAN FIND THE MAX */
+	/* @SEAN */
 	bubble.random.average_time = bubble.random.total_time / num_tests;
 	selection.random.average_time = selection.random.total_time / num_tests;
 
-	// Find the average sorted time for each
+
+	// SORTED AVERAGE -------
 	timsort.sorted.average_time = timsort.sorted.total_time / num_tests;
 
-	/* @J'LUN FIND THE MAX */
+	/* @J'LUN */
+	quicksort.sorted.average_time = quicksort.sorted.total_time / num_tests;
+	heapsort.sorted.average_time = heapsort.sorted.total_time / num_tests;
 
-
-	/* @SEAN FIND THE MAX */
+	/* @SEAN */
 	bubble.sorted.average_time = bubble.sorted.total_time / num_tests;
 	selection.sorted.average_time = selection.sorted.total_time / num_tests;
 
 
-	// Print the record
-	printRecords(timsort, bubble, selection);
-
-	/* @J'LUN PRINT THE RECORD */
-
-
-	/* @SEAN PRINT THE RECORD */
+	// Print the records @J'LUN @SEAN
+	printRecords(timsort, bubble, selection, quicksort, heapsort);
 
 
 	// Clean up memory 
@@ -188,7 +196,10 @@ int main()
 	delete[] timsort.random.tests;
 
 	/* @J'LUN CLEAN UP RECORD MEMORY */
-
+	delete[] quicksort.sorted.tests;
+	delete[] quicksort.random.tests;
+	delete[] heapsort.sorted.tests;
+	delete[] heapsort.random.tests;
 
 	/* @SEAN CLEAN UP RECORD MEMORY */
 	delete[] bubble.sorted.tests;
@@ -251,7 +262,7 @@ void printArray(int* arr) {
 	cout << endl;
 }
 
-void printRecords(Record timsort, Record bubble, Record selection) {
+void printRecords(Record timsort, Record bubble, Record selection, Record quicksort, Record heapsort) {
 	cout << setw(15) << "Sort";
 	cout << setw(35) << "Min Time (Unsorted Case)";
 	cout << setw(35) << "Max Time (Unsorted Case)";
@@ -279,6 +290,20 @@ void printRecords(Record timsort, Record bubble, Record selection) {
 	cout << setw(35) << selection.random.average_time;
 	cout << setw(35) << selection.sorted.average_time;
 	cout << endl;
+
+	cout << setw(15) << "Quicksort";
+	cout << setw(35) << quicksort.random.min;
+	cout << setw(35) << quicksort.random.max;
+	cout << setw(35) << quicksort.random.average_time;
+	cout << setw(35) << quicksort.sorted.average_time;
+	cout << endl;
+
+	cout << setw(15) << "Heapsort";
+	cout << setw(35) << heapsort.random.min;
+	cout << setw(35) << heapsort.random.max;
+	cout << setw(35) << heapsort.random.average_time;
+	cout << setw(35) << heapsort.sorted.average_time;
+	cout << endl;
 }
 
 /* RUNTEST ------------------------------------------------	
@@ -292,10 +317,9 @@ void printRecords(Record timsort, Record bubble, Record selection) {
 		record (Test): Place to record findings
 -------------------------------------------------------- */
 void runTest(int* arr, Record &record, int test_num) {
-	/*
-		cout << "ARRAY BEFORE SORT: \n";
-		printArray(arr); // @TEST
-	*/
+	// @TEST
+	cout << "ARRAY BEFORE SORT: \n";
+	printArray(arr); // @TEST
 
 	// Get current time
 	auto start_random = high_resolution_clock::now();
@@ -307,12 +331,12 @@ void runTest(int* arr, Record &record, int test_num) {
 
 	auto duration_random = duration_cast<microseconds>(stop_random - start_random);
 
-	/*
-		cout << "ARRAY AFTER SORT: \n";
-		printArray(arr); // @TEST
-	*/
+	// @TEST
+	cout << "ARRAY AFTER SORT: \n";
+	printArray(arr);
 
-	// @TEST cout << "\nTime is " << duration_random.count() << endl << endl;
+	// @TEST 
+	cout << "\nTime is " << duration_random.count() << endl << endl;
 
 	record.random.tests[test_num] = duration_random.count();
 	record.random.total_time += duration_random.count();
@@ -327,12 +351,12 @@ void runTest(int* arr, Record &record, int test_num) {
 
 	auto duration_sorted = duration_cast<microseconds>(stop_sorted - start_sorted);
 
-	/*
-		cout << "ARRAY AFTER ANOTHER SORT: \n";
-		printArray(arr); // @TEST
-	*/
+	// @TEST
+	cout << "ARRAY AFTER ANOTHER SORT: \n";
+	printArray(arr);
 
-	// @TEST cout << "\nTime is " << duration_sorted.count() << endl << endl;
+	// @TEST
+	cout << "\nTime is " << duration_sorted.count() << endl << endl;
 
 	record.sorted.tests[test_num] = duration_sorted.count();
 	record.sorted.total_time += duration_sorted.count();
