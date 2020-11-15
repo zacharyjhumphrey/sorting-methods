@@ -23,7 +23,8 @@ void selectionSort(int arr[], int n)
 
 				min_idx = j;
 
-				arr[i] = arr[min_idx]; //Puts the value of our initial number equal to the value of the new lower number
+				// @CHANGE
+				// arr[i] = arr[min_idx]; //Puts the value of our initial number equal to the value of the new lower number
 
 			}
 		}
