@@ -6,16 +6,14 @@
 #include <chrono> 
 #include "timsort.h"
 
-// @J'LUN INCLUDE HEADERS
 #include "FastSorts.h"
-
-// @SEAN INCLUDE HEADERS
 #include "slowSorts.h"
 
 using namespace std;
 using namespace std::chrono;
 
-const int ARRAY_SIZE = 50;
+const int NUM_TESTS = 100;
+
 
 struct Case {
 	int total_time = 0;
@@ -32,10 +30,10 @@ struct Record {
 
 int findMax(int arr[], int num_tests);
 int findMin(int arr[], int num_tests);
-int* randomArray();
-int* copyArray(int* original_array);
-void runTest(int* arr, void(*fn)(int*, const int), Record &record, int test_num);
-void printArray(int* arr);
+int* randomArray(int len);
+int* copyArray(int* original_array, int len);
+void runTest(int* arr, void(*fn)(int*, const int), Record& record, int test_num, int array_size);
+void printArray(int* arr, int len);
 void printRecords(Record r1, Record r2, Record r3, Record r4, Record r5);
 
 /* ------------------------------------------------------ MAIN ------------------------------------------------------ */
@@ -60,7 +58,7 @@ void printRecords(Record r1, Record r2, Record r3, Record r4, Record r5);
 int main()
 {
 	// Initializing variables
-	int num_tests = 0;
+	int array_size = 0;
 	int num_sorts = 5;
 	
 	// Create records
@@ -71,30 +69,30 @@ int main()
 	void (*sorts[])(int*, const int) = { timSort, quickSort, heapSort, bubbleSort, selectionSort };
 
 	do {
-		cout << "Enter the number of times you would like to run tests: ";
-		cin >> num_tests;
+		cout << "Enter the size of the array: ";
+		cin >> array_size;
 		cin.get();
 
-		if (num_tests < 0) cerr << "\nERROR: Number of tests must be greater than 0. Enter 0 to exit the program\n\n"; // Error case
-	} while (num_tests < 0); // Run until the number of tests is greater than or equal to zero
+		if (array_size < 0) cerr << "\nERROR: Number of tests must be greater than 0. Enter 0 to exit the program\n\n"; // Error case
+	} while (array_size < 0); // Run until the number of tests is greater than or equal to zero
 
 	// Exit the program if the user doesn't want to run any tests
-	if (num_tests == 0) return 0;
+	if (array_size == 0) return 0;
 
 	// INIT TEST ARRAYS -----------------
 	for (int i = 0; i < num_sorts; i++) {
-		records[i]->sorted.tests = new int[num_tests];
-		records[i]->random.tests = new int[num_tests];
+		records[i]->sorted.tests = new int[NUM_TESTS];
+		records[i]->random.tests = new int[NUM_TESTS];
 	}
 
 	// RUN TESTS ------------------------
-	for (int i = 0; i < num_tests; i++) { 
-		int* original_array = randomArray();
+	for (int i = 0; i < NUM_TESTS; i++) {
+		int* original_array = randomArray(array_size);
 
 		// Run tests for each of the sorts 
 		for (int j = 0; j < num_sorts; j++) {
-			int* copy_array = copyArray(original_array);
-			runTest(copy_array, *sorts[j], *records[j], i);
+			int* copy_array = copyArray(original_array, array_size);
+			runTest(copy_array, *sorts[j], *records[j], i, array_size);
 			delete[] copy_array;
 		}
 	}
@@ -102,22 +100,22 @@ int main()
 
 	// FIND MINIMUM ----------------------
 	for (int i = 0; i < num_sorts; i++) {
-		records[i]->random.min = findMin(records[i]->random.tests, num_tests);
+		records[i]->random.min = findMin(records[i]->random.tests, NUM_TESTS);
 	}
 
 	// FIND MAXIMUM ----------------------
 	for (int i = 0; i < num_sorts; i++) {
-		records[i]->random.max = findMax(records[i]->random.tests, num_tests);
+		records[i]->random.max = findMax(records[i]->random.tests, NUM_TESTS);
 	}
 
 	// FIND UNSORTED AVERAGE --------------
 	for (int i = 0; i < num_sorts; i++) {
-		records[i]->random.average_time = records[i]->random.total_time / num_tests;
+		records[i]->random.average_time = records[i]->random.total_time / NUM_TESTS;
 	}
 
 	// FIND SORTED AVERAGE ----------------
 	for (int i = 0; i < num_sorts; i++) {
-		records[i]->sorted.average_time = records[i]->sorted.total_time / num_tests;
+		records[i]->sorted.average_time = records[i]->sorted.total_time / NUM_TESTS;
 	}
 
 	// PRINT RECORDS ----------------------
@@ -155,19 +153,19 @@ int findMax(int arr[], int num_tests) {
 	return max;
 }
 
-int* randomArray() {
-	int* arr = new int[ARRAY_SIZE];
+int* randomArray(int n) {
+	int* arr = new int[n];
 
-	for (int i = 0; i < ARRAY_SIZE; i++) {
+	for (int i = 0; i < n; i++) {
 		arr[i] = rand() % 100 + 1;
 	}
 
 	return arr;
 }
 
-int* copyArray(int* original_array) {
-	int* temp = new int[ARRAY_SIZE];
-	for (int i = 0; i < ARRAY_SIZE; i++) {
+int* copyArray(int* original_array, int n) {
+	int* temp = new int[n];
+	for (int i = 0; i < n; i++) {
 		temp[i] = original_array[i];
 	}
 	return temp;
@@ -176,10 +174,10 @@ int* copyArray(int* original_array) {
 /* PRINTARRAY ---------------------------------------------
 	Prints array to the console
 -------------------------------------------------------- */
-void printArray(int* arr) {
-	for (int i = 0; i < ARRAY_SIZE; i++) {
+void printArray(int* arr, int n ) {
+	for (int i = 0; i < n; i++) {
 		cout << arr[i];
-		if (i != ARRAY_SIZE - 1) cout << ", "; // Print this if there is another number after this one
+		if (i != n - 1) cout << ", "; // Print this if there is another number after this one
 	}
 	cout << endl;
 }
@@ -238,12 +236,12 @@ void printRecords(Record timsort, Record bubble, Record selection, Record quicks
 		arr (int pointer): Pointer to the original, random array
 		record (Test): Place to record findings
 -------------------------------------------------------- */
-void runTest(int* arr, void(*fn)(int*, const int), Record& record, int test_num) {
+void runTest(int* arr, void(*fn)(int*, const int), Record& record, int test_num, int array_size) {
 	// Get current time
 	auto start_random = high_resolution_clock::now();
 
 	// Run function
-	fn(arr, ARRAY_SIZE);
+	fn(arr, array_size);
 
 	auto stop_random = high_resolution_clock::now();
 
@@ -256,7 +254,7 @@ void runTest(int* arr, void(*fn)(int*, const int), Record& record, int test_num)
 	auto start_sorted = high_resolution_clock::now();
 
 	// Run function
-	fn(arr, ARRAY_SIZE);
+	fn(arr, array_size);
 
 	auto stop_sorted = high_resolution_clock::now();
 

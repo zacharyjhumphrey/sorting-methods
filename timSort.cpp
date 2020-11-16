@@ -2,7 +2,7 @@
 // See source: https://www.geeksforgeeks.org/timsort/
 // C++ program to perform TimSort. 
 using namespace std;
-const int RUN = 32;
+const int RUN = 64;
 
 int min(int x, int y) {
 	return (x < y) ? x : y;
