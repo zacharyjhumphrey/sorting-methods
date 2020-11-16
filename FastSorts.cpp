@@ -12,7 +12,7 @@ void swapQ(int* a, int* b)
     *b = t;
 }
 
-void split(int arr[], int first, int last)
+int split(int arr[], int first, int last)
 {
     int pivot = arr[last];    //pivot (largest element)
     int i = (first - 1);  // Index of smaller element 
@@ -33,15 +33,34 @@ void split(int arr[], int first, int last)
     return (i + 1); //Return the i
 }
 
-void quickSort(int arr[],int first, int last)
+/* 
+	This is the function that will be recursively called
+*/
+void quickSortRecursive(int arr[], int first, int last) {
+	// If the first number is less than the last number 
+	if (first < last)
+	{
+		int position = split(arr, first, last); //Puts the position index at the right place
+		quickSortRecursive(arr, first, position - 1); //Sort left
+		quickSortRecursive(arr, position + 1, last); //Sort right 
+	}
+}
+
+/*
+	This function starts the recursion. It is the base case
+	(This is necessary to running this function through the runTest function in main)
+*/
+void quickSort(int arr[], const int n)
 {
-    //if the first number is less than the last number 
-    if (first < last)
-    {
-       int position = split(arr, first, last); //Puts the position index at the right place
-        quickSort(arr, first, position - 1); //Sort left
-        quickSort(arr, position + 1, last); //Sort right 
-    }
+	int last = n - 1;
+	if (n < 0) {
+		cerr << "\nERROR: Input is less than zero. Unable to QUICKSORT array\n";
+		return;
+	}
+
+    int position = split(arr, 0, last); // Puts the position index at the right place
+	quickSortRecursive(arr, 0, position - 1); // Sort left
+	quickSortRecursive(arr, position + 1, last); // Sort right 
 }
 
 //Credit to GeeksforGeeks 
@@ -57,7 +76,7 @@ void swapArray(int& num1, int& num2)
 }
 
 
-//Heapify array rooted with node
+// Heapify array rooted with node
 void heapify(int arr[], int n, int i)
 {
     //n is the size of the heap 
@@ -78,14 +97,14 @@ void heapify(int arr[], int n, int i)
     // If largest is not root 
     if (large != i)
     {
-		swap2(arr[i], arr[large]); //swap the value we are at with the largest number
+		swapArray(arr[i], arr[large]); //swap the value we are at with the largest number
 
         // Recursively heapify the affected sub-tree 
         heapify(arr, n, large);
     }
 }
 
-// main function to do heap sort 
+// Main function to do heap sort 
 void heapSort(int arr[], int n)
 {
     // Build heap (rearrange array) 
@@ -96,7 +115,7 @@ void heapSort(int arr[], int n)
     for (int i = n - 1; i > 0; i--)
     {
         // Move current root to end 
-		swap2(arr[0], arr[i]);
+		swapArray(arr[0], arr[i]);
 
         // call max heapify on the reduced heap 
         heapify(arr, i, 0); //Resorts the list, puts the max number at the parent node 
