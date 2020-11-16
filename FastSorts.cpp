@@ -1,8 +1,9 @@
 #include <iostream>
 using namespace std;
 
-//Credit: Data Structures Sorts Slides (slide 38) (void split and void quicksort)
+
 //Credit: https://www.geeksforgeeks.org/cpp-program-for-quicksort/ (void swapQ)
+//Program performs Quick Sort
 
 void swapQ(int* a, int* b)
 {
@@ -11,28 +12,25 @@ void swapQ(int* a, int* b)
     *b = t;
 }
 
-
-void split(int arr[], int first, int last, int& position)
+void split(int arr[], int first, int last)
 {
-    int pivot = arr[first]; //pivot the element
-    int left = first; //index for left search
-    int right = last; //index for right search
+    int pivot = arr[last];    //pivot (largest element)
+    int i = (first - 1);  // Index of smaller element 
 
-    while (left < right) 
-    {
-        while (pivot < arr[right]) //Searches from the right
-            right--;
-        while (left < right && (arr[left] < pivot || arr[left] == pivot)) //Search from the left
-            left++;
-
-        if (left < right) //If the searches haven't happened
-            swapQ(arr[left, arr[right]); //Interchange the elements
+    //Loop checks if the index is smaller than the pivot, if it smaller the loop continues
+    for (int j = first; j <= last - 1; j++)
+    { 
+        //If the the smaller element is smaller than or equal to the largest element
+        if (arr[j] <= pivot)
+        {
+            i++;    // increment index of smaller element 
+            swapQ(&arr[i], &arr[j]);
+        }
     }
 
-    //End of searches, places pivot in the correct position
-    position = right;
-    arr[first] = arr[position]; 
-    arr[position] = pivot; 
+    //?? 
+    swapQ(&arr[i + 1], &arr[last]);
+    return (i + 1); //Return the i
 }
 
 void quickSort(int arr[],int first, int last)
@@ -40,7 +38,7 @@ void quickSort(int arr[],int first, int last)
     //if the first number is less than the last number 
     if (first < last)
     {
-        split(arr, first, last, position); //Split into 2
+       int position = split(arr, first, last, last); //Puts the position index at the right place
         quickSort(arr, first, position - 1); //Sort left
         quickSort(arr, position + 1, last); //Sort right 
     }
