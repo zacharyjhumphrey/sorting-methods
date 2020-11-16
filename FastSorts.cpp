@@ -38,7 +38,7 @@ void quickSort(int arr[],int first, int last)
     //if the first number is less than the last number 
     if (first < last)
     {
-       int position = split(arr, first, last, last); //Puts the position index at the right place
+       int position = split(arr, first, last); //Puts the position index at the right place
         quickSort(arr, first, position - 1); //Sort left
         quickSort(arr, position + 1, last); //Sort right 
     }
