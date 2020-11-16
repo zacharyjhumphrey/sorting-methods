@@ -50,7 +50,7 @@ void quickSortRecursive(int arr[], int first, int last) {
 	This function starts the recursion. It is the base case
 	(This is necessary to running this function through the runTest function in main)
 */
-void quickSort(int arr[], const int n)
+void quickSort(int arr[], int n)
 {
 	int last = n - 1;
 	if (n < 0) {

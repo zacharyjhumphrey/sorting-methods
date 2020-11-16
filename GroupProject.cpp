@@ -61,23 +61,15 @@ int main()
 {
 	// Initializing variables
 	int num_tests = 0;
+	int num_sorts = 5;
 	
-	Record timsortRecord;
-
-	// @J'LUN "SORT1"
-	Record quicksortRecord;
-
-	// @J'LUN "SORT2"
-	Record heapsortRecord;
+	// Create records
+	Record timsortRecord, quicksortRecord, heapsortRecord, bubbleRecord, selectionRecord;
+	Record* records[] = { &timsortRecord, &quicksortRecord, &heapsortRecord, &bubbleRecord, &selectionRecord };
 	
-	// @SEAN "SORT1"
-	Record bubbleRecord;
+	// Array of sorts 
+	void (*sorts[])(int*, const int) = { timSort, quickSort, heapSort, bubbleSort, selectionSort };
 
-	// @SEAN "SORT2"
-	Record selectionRecord;
-
-	// Record records[] = { timsortRecord, quicksortRecord };
-	
 	do {
 		cout << "Enter the number of times you would like to run tests: ";
 		cin >> num_tests;
@@ -89,121 +81,53 @@ int main()
 	// Exit the program if the user doesn't want to run any tests
 	if (num_tests == 0) return 0;
 
-	// Create arrays the size of the tests for each of the cases
-	timsortRecord.sorted.tests = new int[num_tests];
-	timsortRecord.random.tests = new int[num_tests];
+	// INIT TEST ARRAYS -----------------
+	for (int i = 0; i < num_sorts; i++) {
+		records[i]->sorted.tests = new int[num_tests];
+		records[i]->random.tests = new int[num_tests];
+	}
 
-	/* @J'LUN CREATE RECORD MEMORY */
-	quicksortRecord.sorted.tests = new int[num_tests];
-	quicksortRecord.random.tests = new int[num_tests];
-	heapsortRecord.sorted.tests = new int[num_tests];
-	heapsortRecord.random.tests = new int[num_tests];
-
-	/* @SEAN CREATE RECORD MEMORY */
-	bubbleRecord.sorted.tests = new int[num_tests];
-	bubbleRecord.random.tests = new int[num_tests];
-	selectionRecord.sorted.tests = new int[num_tests];
-	selectionRecord.random.tests = new int[num_tests];
-
-	// Run x number of tests for each sort on each case
+	// RUN TESTS ------------------------
 	for (int i = 0; i < num_tests; i++) { 
 		int* original_array = randomArray();
-		
-		/*----------------- Sort 1: Timsort ----------------- */
-		int* timsort_array = copyArray(original_array);
-		runTest(timsort_array, timSort, timsortRecord, i); // Sorts in random case and pre-sorted case
-		delete[] timsort_array;
 
-		/*----------------- Sort 2: @J'LUN "SORT1" ----------------- */
-		int* quicksort_array = copyArray(original_array);
-		runTest(quicksort_array, quickSort, quicksortRecord, i); // Sorts in random case and pre-sorted case
-		delete[] quicksort_array;
-
-		/*----------------- Sort 3: @J'LUN "SORT2" ----------------- */
-		int* heapsort_array = copyArray(original_array);
-		runTest(heapsort_array, heapSort, heapsortRecord, i); // Sorts in random case and pre-sorted case
-		delete[] heapsort_array;
-
-		/*----------------- Sort 4: @SEAN "SORT1" ----------------- */
-		int* bubble_array = copyArray(original_array);
-		runTest(bubble_array, bubbleSort, bubbleRecord, i); // Sorts in random case and pre-sorted case
-		delete[] bubble_array;
-
-		/*----------------- Sort 5: @SEAN "SORT2" ----------------- */
-		int* selection_array = copyArray(original_array);
-		runTest(selection_array, selectionSort, selectionRecord, i); // Sorts in random case and pre-sorted case
-		delete[] selection_array;
-
+		// Run tests for each of the sorts 
+		for (int j = 0; j < num_sorts; j++) {
+			int* copy_array = copyArray(original_array);
+			runTest(copy_array, *sorts[j], *records[j], i);
+			delete[] copy_array;
+		}
 	}
 
 
-	// MINIMUM -------------
-	timsortRecord.random.min = findMin(timsortRecord.random.tests, num_tests);
-	
-	/* @J'LUN FIND THE MIN */
-	quicksortRecord.random.min = findMin(quicksortRecord.random.tests, num_tests);
-	heapsortRecord.random.min = findMin(heapsortRecord.random.tests, num_tests);
+	// FIND MINIMUM ----------------------
+	for (int i = 0; i < num_sorts; i++) {
+		records[i]->random.min = findMin(records[i]->random.tests, num_tests);
+	}
 
-	/* @SEAN FIND THE MIN */
-	bubbleRecord.random.min = findMin(bubbleRecord.random.tests, num_tests);
-	selectionRecord.random.min = findMin(selectionRecord.random.tests, num_tests);
+	// FIND MAXIMUM ----------------------
+	for (int i = 0; i < num_sorts; i++) {
+		records[i]->random.max = findMax(records[i]->random.tests, num_tests);
+	}
 
+	// FIND UNSORTED AVERAGE --------------
+	for (int i = 0; i < num_sorts; i++) {
+		records[i]->random.average_time = records[i]->random.total_time / num_tests;
+	}
 
-	// MAXIMUM -------------
-	timsortRecord.random.max = findMax(timsortRecord.random.tests, num_tests);
-	
-	/* @J'LUN */
-	quicksortRecord.random.max = findMax(quicksortRecord.random.tests, num_tests);
-	heapsortRecord.random.max = findMax(heapsortRecord.random.tests, num_tests);
+	// FIND SORTED AVERAGE ----------------
+	for (int i = 0; i < num_sorts; i++) {
+		records[i]->sorted.average_time = records[i]->sorted.total_time / num_tests;
+	}
 
-	/* @SEAN */
-	bubbleRecord.random.max = findMax(bubbleRecord.random.tests, num_tests);
-	selectionRecord.random.max = findMax(selectionRecord.random.tests, num_tests);
-
-
-	// UNSORTED AVERAGE -----
-	timsortRecord.random.average_time = timsortRecord.random.total_time / num_tests;
-
-	/* @J'LUN */
-	quicksortRecord.random.average_time = quicksortRecord.random.total_time / num_tests;
-	heapsortRecord.random.average_time = heapsortRecord.random.total_time / num_tests;
-
-	/* @SEAN */
-	bubbleRecord.random.average_time = bubbleRecord.random.total_time / num_tests;
-	selectionRecord.random.average_time = selectionRecord.random.total_time / num_tests;
-
-
-	// SORTED AVERAGE -------
-	timsortRecord.sorted.average_time = timsortRecord.sorted.total_time / num_tests;
-
-	/* @J'LUN */
-	quicksortRecord.sorted.average_time = quicksortRecord.sorted.total_time / num_tests;
-	heapsortRecord.sorted.average_time = heapsortRecord.sorted.total_time / num_tests;
-
-	/* @SEAN */
-	bubbleRecord.sorted.average_time = bubbleRecord.sorted.total_time / num_tests;
-	selectionRecord.sorted.average_time = selectionRecord.sorted.total_time / num_tests;
-
-
-	// Print the records @J'LUN @SEAN
+	// PRINT RECORDS ----------------------
 	printRecords(timsortRecord, bubbleRecord, selectionRecord, quicksortRecord, heapsortRecord);
 
-
-	// Clean up memory 
-	delete[] timsortRecord.sorted.tests;
-	delete[] timsortRecord.random.tests;
-
-	/* @J'LUN CLEAN UP RECORD MEMORY */
-	delete[] quicksortRecord.sorted.tests;
-	delete[] quicksortRecord.random.tests;
-	delete[] heapsortRecord.sorted.tests;
-	delete[] heapsortRecord.random.tests;
-
-	/* @SEAN CLEAN UP RECORD MEMORY */
-	delete[] bubbleRecord.sorted.tests;
-	delete[] bubbleRecord.random.tests;
-	delete[] selectionRecord.sorted.tests;
-	delete[] selectionRecord.random.tests;
+	// CLEAN UP MEMORY --------------------
+	for (int i = 0; i < num_sorts; i++) {
+		delete[] records[i]->sorted.tests;
+		delete[] records[i]->random.tests;
+	}
 
 	// Exit
 	return 0;
@@ -314,7 +238,7 @@ void printRecords(Record timsort, Record bubble, Record selection, Record quicks
 		arr (int pointer): Pointer to the original, random array
 		record (Test): Place to record findings
 -------------------------------------------------------- */
-void runTest(int* arr, void(*fn)(int*, const int), Record &record, int test_num) {
+void runTest(int* arr, void(*fn)(int*, const int), Record& record, int test_num) {
 	// Get current time
 	auto start_random = high_resolution_clock::now();
 
